@@ -1,0 +1,14 @@
+body{
+  margin: 0;
+  padding: 0;
+}
+
+html, body{
+  height: 100%;
+}
+
+.root{
+  margin: 0 auto;
+  max-width: 500px;
+  height: 100%;
+}
