@@ -1,7 +1,6 @@
 .home-container{
-    height: 100vh;
+    height: 100%;
     max-width: 500px;
-    position: relative;
     overflow: hidden;
 }
 
