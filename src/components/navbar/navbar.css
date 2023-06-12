@@ -20,7 +20,7 @@
     background-color: white;
 }
 
-.navbar-section a{
+.navbar-section div{
     text-decoration: none;
     box-sizing: border-box;
     width: 65px;

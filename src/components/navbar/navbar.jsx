@@ -1,4 +1,4 @@
-import { useState, useEffect, Fragment } from 'react'
+import { useState, useEffect, Fragment, useRef } from 'react'
 import './navbar.css'
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
@@ -6,6 +6,7 @@ import { useLocation } from 'react-router-dom';
 export default function Navbar(){
 
     const history = useLocation()
+    const containerRef = useRef(null);
 
     useEffect(() => {
         selectButton()
@@ -56,26 +57,30 @@ export default function Navbar(){
         }
     }
 
-    const container = document.querySelector('.development-container')
-
     const openPopup = () => {
-        container.style.zIndex = '2'
-        setTimeout(() => {
-            container.style.opacity = '100%'
-        }, 100);
-    }
-
+        const container = containerRef.current;
+        if (container) {
+          container.style.zIndex = '2';
+          setTimeout(() => {
+            container.style.opacity = '100%';
+          }, 100);
+        }
+    };
+    
     const closePopup = () => {
-        container.style.opacity = '0'
-        setTimeout(() => {
-            container.style.zIndex = '-1'
-        }, 100);
-    }
+        const container = containerRef.current;
+        if (container) {
+          container.style.opacity = '0';
+          setTimeout(() => {
+            container.style.zIndex = '-1';
+          }, 100);
+        }
+    };
 
 
     return(
     <Fragment>
-        <div className='development-container'>
+        <div  ref={containerRef} className='development-container'>
             <div className="card">
                 <div className="header">
                     <div className="image">
