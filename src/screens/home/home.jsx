@@ -67,79 +67,102 @@ export default function Home(){
         {name: 'Videira', img: 'https://i.ytimg.com/vi/GRSomT3B5sw/maxresdefault.jpg'}
     ]
 
-    const cities2 = [
-        "Fraiburgo",
-        "Arroio Trinta",
-        "Tangará",
-        "Videira",
-        "Pinheiro Preto",
-        "Iomerê"
-      ];
-      
-      const types = [
-        "Rotas Turísticas",
-        "Onde Dormir",
-        "Onde Comer",
-        "O Que Fazer",
-        "Perto de Você"
-      ];
-
-      const imgs = [
-        'https://s1.static.brasilescola.uol.com.br/be/2022/04/turismo.jpg',
-        'https://blog.123milhas.com/wp-content/uploads/2022/05/tipos-de-turismo-para-fazer-no-brasil-ecoturismo-cultural-gastronomico-conexao123.png.jpg',
-        'https://static.nationalgeographicbrasil.com/files/styles/image_3200/public/coral-reforestation-maldives.jpg?w=1600&h=900',
-        'https://rodoviariaonline.com.br/wp-content/uploads/2019/05/o-que-e-turismo-de-aventura-e-como-pratica-lo.jpg',
-        'https://www.passagenspromo.com.br/blog/wp-content/uploads/2022/02/Tipos-de-turismo-740x415.jpg',
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFijr6IFhZBwxr0wTC_52st4O_OdNDzM9U-g&usqp=CAU',
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkAaIQ1tQdBowMxZLK6yA-tH0Wn9CgnW9kJw&usqp=CAU',
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxFFPKy_YROP-MzI5q9mHC6Va4-IeKvDPamg&usqp=CAU',
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS67e3BG2R81kqfiUrOXdC7xjBvIrO0AG4rOA&usqp=CAU',
-        'https://www.melhoresdestinos.com.br/wp-content/uploads/2022/04/melhores-destinos-mundo-turismo-aventura-capa.jpg',
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ48zBccABbdIZ8af-mPPYAz3W-VkZNPVxPsA&usqp=CAU'
-      ]
-
-      const getRandomNumber = (min, max) => {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-      };
-
-      const getRandomElement = (array) => {
-        const randomIndex = getRandomNumber(0, array.length - 1);
-        return array[randomIndex];
-      };
-      
-      const posts = [];
-      
-      for (let i = 0; i < 30; i++) {
-        const title = `mi ipsum faucibus vitae aliquet nec ullamcorper`;
-        const city = getRandomElement(cities2);
-        const img = imgs[getRandomNumber(0, imgs.length - 1)];
-        const type = getRandomElement(types);
-      
-        posts.push({
-          title,
-          city,
-          img,
-          type
-        });
-      }
-      
-      console.log(posts);
-      
-
     const [isOpen, setIsOpen] = useState(false);
     const [selectedValue, setSelectedValue] = useState({name:'Selecione um Município', img:'https://deolhonofuturo.uninter.com/wp-content/uploads/2020/06/turismo-pos-pandemia-1123x675.png'})
     const [div1Height, setDiv1Height] = useState(0);
+    const [posts, setPosts] = useState([]);
 
     useEffect(() => {
         const div1 = document.getElementById('content-header');
         const height = div1.offsetHeight;
         setDiv1Height(height);
-      }, [selectedValue]);
+    }, [selectedValue]);
+  
+    useEffect(() => {
+        const cities2 = [
+            "Fraiburgo",
+            "Arroio Trinta",
+            "Tangará",
+            "Videira",
+            "Pinheiro Preto",
+            "Iomerê"
+        ];
     
+        const types = [
+            "Rotas Turísticas",
+            "Onde Dormir",
+            "Onde Comer",
+            "O Que Fazer",
+            "Perto de Você"
+        ];
+    
+        const cutePhrases = [
+            "Explorando juntos as maravilhas de",
+            "Descobrindo o encanto de",
+            "Aproveitando o aconchego de",
+            "Saboreando as delícias de",
+            "Aventurando-se em",
+            "Vivendo momentos mágicos em",
+            "Explorando a beleza natural de",
+            "Conhecendo a cultura e história de",
+            "Relaxando na paz e tranquilidade de",
+            "Descobrindo as surpresas encantadoras de"
+        ];
+    
+        const getRandomNumber = (min, max) => {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        };
+    
+        const getRandomElement = (array) => {
+            const randomIndex = getRandomNumber(0, array.length - 1);
+            return array[randomIndex];
+        };
+    
+        const getRandomCutePhrase = () => {
+            const phrase = getRandomElement(cutePhrases);
+            const city = getRandomElement(cities2);
+            return `${phrase} ${city}`;
+        };
+    
+        const getRandomType = () => {
+            return getRandomElement(types);
+        };
+    
+        const imgs = [
+            'https://s1.static.brasilescola.uol.com.br/be/2022/04/turismo.jpg',
+            'https://blog.123milhas.com/wp-content/uploads/2022/05/tipos-de-turismo-para-fazer-no-brasil-ecoturismo-cultural-gastronomico-conexao123.png.jpg',
+            'https://static.nationalgeographicbrasil.com/files/styles/image_3200/public/coral-reforestation-maldives.jpg?w=1600&h=900',
+            'https://rodoviariaonline.com.br/wp-content/uploads/2019/05/o-que-e-turismo-de-aventura-e-como-pratica-lo.jpg',
+            'https://www.passagenspromo.com.br/blog/wp-content/uploads/2022/02/Tipos-de-turismo-740x415.jpg',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFijr6IFhZBwxr0wTC_52st4O_OdNDzM9U-g&usqp=CAU',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkAaIQ1tQdBowMxZLK6yA-tH0Wn9CgnW9kJw&usqp=CAU',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxFFPKy_YROP-MzI5q9mHC6Va4-IeKvDPamg&usqp=CAU',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS67e3BG2R81kqfiUrOXdC7xjBvIrO0AG4rOA&usqp=CAU',
+            'https://www.melhoresdestinos.com.br/wp-content/uploads/2022/04/melhores-destinos-mundo-turismo-aventura-capa.jpg',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ48zBccABbdIZ8af-mPPYAz3W-VkZNPVxPsA&usqp=CAU'
+        ];
+    
+        const generatedPosts = [];
 
+        for (let i = 0; i < 30; i++) {
+            const city = getRandomElement(cities2);
+            const phrase = getRandomCutePhrase();
+            const type = getRandomType();
+            const img = getRandomElement(imgs);
+    
+            generatedPosts.push({
+            title: phrase,
+            city: city,
+            img,
+            type
+            });
+        }
+  
+        setPosts(generatedPosts);
+    }, []);
+    
     const openModal = () => {
         setIsOpen(true);
-        console.log("a")
     }
 
     const closeModal = (name, img) => {
@@ -197,10 +220,10 @@ export default function Home(){
         </section>
         {isOpen && (
         <div className="modal-container">
-            <div  onClick={() => {closeModal(selectedValue.name, selectedValue.img)}} className='modal-background'></div>
+            <div  onClick={() => {setIsOpen(false)}} className='modal-background'></div>
             <div className="modal-content">
                 {cities.map((city, index) => (
-                    <div className='button-city-div'>
+                    <div key={index} className='button-city-div'>
                         <button key={index} onClick={() => {closeModal(city.name, city.img)}}>{city.name}</button>
                     </div>
                 ))}
