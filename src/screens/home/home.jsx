@@ -1,5 +1,6 @@
 import './home.css'
 import HomeButtons from '../../components/homeButtons/homeButtons'
+import { Fragment, useState } from 'react';
 
 export default function Home(){
 
@@ -55,15 +56,44 @@ export default function Home(){
         </svg>),
         color1: '#EEB5C7'}
     ]
+    const cities = [
+        {name: 'Todos os Municípios', img: 'https://deolhonofuturo.uninter.com/wp-content/uploads/2020/06/turismo-pos-pandemia-1123x675.png'},
+        {name: 'Arroio Trinta', img: 'https://rotadaamizade.com.br/wp-content/uploads/2021/08/arroio_trinta_17.png'},
+        {name: 'Fraiburgo', img: 'https://static.coalize.com.br/data/images/fraiburgo-sc.jpg'},
+        {name: 'Iomerê', img: 'https://rotadaamizade.com.br/wp-content/uploads/2021/08/iomere_03.jpg'},
+        {name: 'Pinheiro Preto', img: 'https://media-cdn.tripadvisor.com/media/photo-s/13/d3/12/0c/visao-geral-do-parque.jpg'},
+        {name: 'Tangará', img: 'https://turismo.tangara.sc.gov.br/uploads/sites/217/2022/12/Tangara-Cidade-Vista-Aerea-scaled-2000x1000.jpg'},
+        {name: 'Videira', img: 'https://i.ytimg.com/vi/GRSomT3B5sw/maxresdefault.jpg'}
+    ]
+    // const cities = ['Todos os Municípios', 'Arroio Trinta', 'Fraiburgo', 'Iomerê', 'Pinheiro Preto', 'Tangará', 'Videira']
+
+    const [isOpen, setIsOpen] = useState(false);
+    const [selectedValue, setSelectedValue] = useState({name:'Selecione um Município', img:'https://deolhonofuturo.uninter.com/wp-content/uploads/2020/06/turismo-pos-pandemia-1123x675.png'})
+
+    const openModal = () => {
+        setIsOpen(true);
+        console.log("a")
+    }
+
+    const closeModal = (name, img) => {
+        setSelectedValue({name: name, img: img});
+        setIsOpen(false);
+    }
+
+    console.log(selectedValue)
 
     return(
+        <Fragment>
         <section className="home-container">
             <div className='home-cities'>
+            <div className='select'>
+                <button onClick={openModal}>{selectedValue.name}</button>
+            </div>
                 <span className='background-img'></span>
-                <img src="https://i.ytimg.com/vi/GRSomT3B5sw/maxresdefault.jpg" alt="" />
+                <img src={selectedValue.img} alt="" />
             </div>
             <div className='home-content'>
-                <h3>Olá, seja bem vindo!</h3>
+                <h3>{selectedValue.name == 'Selecione um Município' || selectedValue.name == 'Todos os Municípios' ? 'Seja bem vindo à Rota da Amizade!' : ` Seja bem vindo a ${selectedValue.name}!`}</h3>
                 <div className='home-search'>
                     <input placeholder='Pesquisar' type="text" />
                     <button className='search-icon-button'>
@@ -88,5 +118,18 @@ export default function Home(){
                 </div>
             </div>
         </section>
+        {isOpen && (
+        <div className="modal-container">
+            <div  onClick={() => {closeModal(selectedValue.name, selectedValue.img)}} className='modal-background'></div>
+            <div className="modal-content">
+                {cities.map((city, index) => (
+                    <div className='button-city-div'>
+                        <button key={index} onClick={() => {closeModal(city.name, city.img)}}>{city.name}</button>
+                    </div>
+                ))}
+            </div>
+        </div>
+        )}
+        </Fragment>
     )
 }
