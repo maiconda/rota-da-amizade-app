@@ -1,6 +1,7 @@
 import './home.css'
 import HomeButtons from '../../components/homeButtons/homeButtons'
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useEffect } from 'react';
+import CardHome from '../../components/cardHome/cardHome';
 
 export default function Home(){
 
@@ -65,10 +66,76 @@ export default function Home(){
         {name: 'Tangará', img: 'https://turismo.tangara.sc.gov.br/uploads/sites/217/2022/12/Tangara-Cidade-Vista-Aerea-scaled-2000x1000.jpg'},
         {name: 'Videira', img: 'https://i.ytimg.com/vi/GRSomT3B5sw/maxresdefault.jpg'}
     ]
-    // const cities = ['Todos os Municípios', 'Arroio Trinta', 'Fraiburgo', 'Iomerê', 'Pinheiro Preto', 'Tangará', 'Videira']
+
+    const cities2 = [
+        "Fraiburgo",
+        "Arroio Trinta",
+        "Tangará",
+        "Videira",
+        "Pinheiro Preto",
+        "Iomerê"
+      ];
+      
+      const types = [
+        "Rotas Turísticas",
+        "Onde Dormir",
+        "Onde Comer",
+        "O Que Fazer",
+        "Perto de Você"
+      ];
+
+      const imgs = [
+        'https://s1.static.brasilescola.uol.com.br/be/2022/04/turismo.jpg',
+        'https://blog.123milhas.com/wp-content/uploads/2022/05/tipos-de-turismo-para-fazer-no-brasil-ecoturismo-cultural-gastronomico-conexao123.png.jpg',
+        'https://static.nationalgeographicbrasil.com/files/styles/image_3200/public/coral-reforestation-maldives.jpg?w=1600&h=900',
+        'https://rodoviariaonline.com.br/wp-content/uploads/2019/05/o-que-e-turismo-de-aventura-e-como-pratica-lo.jpg',
+        'https://www.passagenspromo.com.br/blog/wp-content/uploads/2022/02/Tipos-de-turismo-740x415.jpg',
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFijr6IFhZBwxr0wTC_52st4O_OdNDzM9U-g&usqp=CAU',
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkAaIQ1tQdBowMxZLK6yA-tH0Wn9CgnW9kJw&usqp=CAU',
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxFFPKy_YROP-MzI5q9mHC6Va4-IeKvDPamg&usqp=CAU',
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS67e3BG2R81kqfiUrOXdC7xjBvIrO0AG4rOA&usqp=CAU',
+        'https://www.melhoresdestinos.com.br/wp-content/uploads/2022/04/melhores-destinos-mundo-turismo-aventura-capa.jpg',
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ48zBccABbdIZ8af-mPPYAz3W-VkZNPVxPsA&usqp=CAU'
+      ]
+
+      const getRandomNumber = (min, max) => {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      };
+
+      const getRandomElement = (array) => {
+        const randomIndex = getRandomNumber(0, array.length - 1);
+        return array[randomIndex];
+      };
+      
+      const posts = [];
+      
+      for (let i = 0; i < 30; i++) {
+        const title = `mi ipsum faucibus vitae aliquet nec ullamcorper`;
+        const city = getRandomElement(cities2);
+        const img = imgs[getRandomNumber(0, imgs.length - 1)];
+        const type = getRandomElement(types);
+      
+        posts.push({
+          title,
+          city,
+          img,
+          type
+        });
+      }
+      
+      console.log(posts);
+      
 
     const [isOpen, setIsOpen] = useState(false);
     const [selectedValue, setSelectedValue] = useState({name:'Selecione um Município', img:'https://deolhonofuturo.uninter.com/wp-content/uploads/2020/06/turismo-pos-pandemia-1123x675.png'})
+    const [div1Height, setDiv1Height] = useState(0);
+
+    useEffect(() => {
+        const div1 = document.getElementById('content-header');
+        const height = div1.offsetHeight;
+        setDiv1Height(height);
+      }, [selectedValue]);
+    
 
     const openModal = () => {
         setIsOpen(true);
@@ -79,8 +146,6 @@ export default function Home(){
         setSelectedValue({name: name, img: img});
         setIsOpen(false);
     }
-
-    console.log(selectedValue)
 
     return(
         <Fragment>
@@ -93,8 +158,9 @@ export default function Home(){
                 <img src={selectedValue.img} alt="" />
             </div>
             <div className='home-content'>
+            <div id='content-header'>
                 <h3>{selectedValue.name == 'Selecione um Município' || selectedValue.name == 'Todos os Municípios' ? 'Seja bem vindo à Rota da Amizade!' : ` Seja bem vindo a ${selectedValue.name}!`}</h3>
-                <div className='home-search'>
+                <form className='home-search'>
                     <input placeholder='Pesquisar' type="text" />
                     <button className='search-icon-button'>
                         <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -103,18 +169,29 @@ export default function Home(){
                         </g>
                         </svg>
                     </button>
-                </div>
-                <div>
+                </form>
+            </div>
+                <div id='posts-div' style={{height: `calc(100% - ${div1Height}px - 32px`}}>
                     <div className='buttons-div'>
-                        {buttons.map((button, index) => (
-                            <HomeButtons
-                                key = {index}
-                                name = {button.name}
-                                color1 = {button.color1}
-                                svg = {button.svg}
-                            />
-                        ))}
+                            {buttons.map((button, index) => (
+                                <HomeButtons
+                                    key = {index}
+                                    name = {button.name}
+                                    color1 = {button.color1}
+                                    svg = {button.svg}
+                                />
+                            ))}
                     </div>
+
+                    {posts.map((post, index) => (
+                        <CardHome
+                            key = {index}
+                            img = {post.img}
+                            title = {post.title}
+                            city = {post.city}
+                            type = {post.type}
+                        />
+                    ))}
                 </div>
             </div>
         </section>
