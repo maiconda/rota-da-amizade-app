@@ -29,7 +29,7 @@ export default function Home(){
         </g>
         </svg>),
         color1: '#FFFDE8'},
-        {name: 'O que Fazer', svg: 
+        {name: 'O Que Fazer', svg: 
         (<svg width="33px" height="33px" viewBox="0 0 24 24" fill="none"><path d="M14.5 16.5H16.1152C16.9825 16.5 17.7946 16.0745 18.2883 15.3614L21.6315 10.5323C21.8588 10.204 21.889 9.77803 21.7105 9.42094C21.3678 8.73545 20.4444 8.60613 19.9265 9.17109L17.2727 12.0661C16.2059 13.23 14.5301 13.612 13.0643 13.0257L9.44043 11.5762C8.53873 11.2155 7.51727 11.3218 6.70922 11.8605L2.87237 14.4184C2.37401 14.7507 2.20104 15.402 2.4689 15.9377C2.76223 16.5244 3.47562 16.7622 4.06229 16.4689L7.24772 14.8762C7.86821 14.5659 8.54577 15.1811 8.29674 15.8286L6.50003 20.5M7.00003 4H4.00003M6.00003 7H4.00003M18 6.5C18 8.70914 16.2092 10.5 14 10.5C11.7909 10.5 10 8.70914 10 6.5C10 4.29086 11.7909 2.5 14 2.5C16.2092 2.5 18 4.29086 18 6.5Z" stroke="#21A6CC" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.7"/></svg>),
         color1: '#D3F2FB'},
         {name: 'Perto de Você', svg: 
@@ -67,10 +67,12 @@ export default function Home(){
         {name: 'Videira', img: 'https://i.ytimg.com/vi/GRSomT3B5sw/maxresdefault.jpg'}
     ]
 
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(false)
     const [selectedValue, setSelectedValue] = useState({name:'Selecione um Município', img:'https://deolhonofuturo.uninter.com/wp-content/uploads/2020/06/turismo-pos-pandemia-1123x675.png'})
-    const [div1Height, setDiv1Height] = useState(0);
-    const [posts, setPosts] = useState([]);
+    const [div1Height, setDiv1Height] = useState(0)
+    const [posts, setPosts] = useState([])
+    const [searchTerm, setSearchTerm] = useState('');
+    const [activeButton, setActiveButton] = useState('')
 
     useEffect(() => {
         const div1 = document.getElementById('content-header');
@@ -120,8 +122,7 @@ export default function Home(){
     
         const getRandomCutePhrase = () => {
             const phrase = getRandomElement(cutePhrases);
-            const city = getRandomElement(cities2);
-            return `${phrase} ${city}`;
+            return `${phrase} `;
         };
     
         const getRandomType = () => {
@@ -146,7 +147,7 @@ export default function Home(){
 
         for (let i = 0; i < 30; i++) {
             const city = getRandomElement(cities2);
-            const phrase = getRandomCutePhrase();
+            const phrase = getRandomCutePhrase() + city;
             const type = getRandomType();
             const img = getRandomElement(imgs);
     
@@ -160,7 +161,31 @@ export default function Home(){
   
         setPosts(generatedPosts);
     }, []);
-    
+
+    const filteredPosts = posts.filter((post) => {
+        if (
+          selectedValue.name === 'Selecione um Município' ||
+          selectedValue.name === 'Todos os Municípios'
+        ) {
+          return true
+        } else {
+          return post.city === selectedValue.name
+        }
+    }).filter((post) => {
+        if (searchTerm === '') {
+          return true
+        } else {
+          const lowerCaseSearchTerm = searchTerm.toLowerCase()
+          return post.title.toLowerCase().includes(lowerCaseSearchTerm)
+        }
+    }).filter((post) => {
+        if (activeButton === '') {
+          return true
+        } else {
+          return post.type === activeButton
+        }
+    });
+
     const openModal = () => {
         setIsOpen(true);
     }
@@ -183,8 +208,8 @@ export default function Home(){
             <div className='home-content'>
             <div id='content-header'>
                 <h3>{selectedValue.name == 'Selecione um Município' || selectedValue.name == 'Todos os Municípios' ? 'Seja bem vindo à Rota da Amizade!' : ` Seja bem vindo a ${selectedValue.name}!`}</h3>
-                <form className='home-search'>
-                    <input placeholder='Pesquisar' type="text" />
+                <div className='home-search'>
+                    <input onChange={(e) => {setSearchTerm(e.target.value)}} placeholder='Pesquisar' type="text" />
                     <button className='search-icon-button'>
                         <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g id="Interface / Search_Magnifying_Glass">
@@ -192,7 +217,7 @@ export default function Home(){
                         </g>
                         </svg>
                     </button>
-                </form>
+                </div>
             </div>
                 <div id='posts-div' style={{height: `calc(100% - ${div1Height}px - 32px`}}>
                     <div className='buttons-div'>
@@ -202,19 +227,29 @@ export default function Home(){
                                     name = {button.name}
                                     color1 = {button.color1}
                                     svg = {button.svg}
+                                    buttonActive = {activeButton == button.name ? 'button-div-active' : 'button-div-desactive'}
+                                    onClick = {() => {
+                                        if (activeButton == button.name) {
+                                            setActiveButton('')
+                                        } else {
+                                            setActiveButton(button.name)
+                                        }
+                                    }}
                                 />
                             ))}
                     </div>
-
-                    {posts.map((post, index) => (
-                        <CardHome
-                            key = {index}
-                            img = {post.img}
-                            title = {post.title}
-                            city = {post.city}
-                            type = {post.type}
-                        />
-                    ))}
+                    {filteredPosts.length > 0 ? 
+                        filteredPosts.map((post, index) => (
+                            <CardHome
+                                key = {index}
+                                img = {post.img}
+                                title = {post.title}
+                                city = {post.city}
+                                type = {post.type}
+                            />
+                        )) : 
+                        <div className='no-result'>Sem resultados disponíveis</div>
+                    }
                 </div>
             </div>
         </section>

@@ -1,19 +1,30 @@
 .button-div{
-    width: 55px;
+    width: auto;
     text-align: center;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     cursor: pointer;
+    transition: .2s;
 }
 
 .button-div div{
-    width: 50px;
     height: 50px;
     border-radius: 8px;
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: .2s;
+}
+
+.button-div-active{
+    width: 90px;
+    transition: .2s;
+}
+
+.button-div-desactive{
+    width: 50px;
+    transition: .2s;
 }
 
 .button-div p{
